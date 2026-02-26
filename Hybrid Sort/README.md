@@ -25,7 +25,7 @@ To compile and run this code:
 ## Compilation and Running (Mac)
 **Compile Hybrid Sort:**
    
-       clang++ -O3 -flto -DNDEBUG -std=c++17 -march=native \-Xpreprocessor -fopenmp \-I$(brew --prefix libomp)/include \-L$(brew --prefix libomp)/lib -lomp \sort.cpp -o sort && ./sort in.txt
+       clang++ -O3 -flto -DNDEBUG -std=c++17 -march=native \-Xpreprocessor -fopenmp \-I$(brew --prefix libomp)/include \-L$(brew --prefix libomp)/lib -lomp \sort.cpp -o sort && ./sort input.txt
 
 
 **Compile Tools**  
@@ -36,3 +36,4 @@ To compile and run this code:
 *Ascending / Descending*
    ```bash
     clang++ -O3 -march=native gener.cpp -o gener && ./gener 
+

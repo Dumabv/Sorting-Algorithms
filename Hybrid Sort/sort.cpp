@@ -143,7 +143,7 @@ void printPeakMemory() {
 #else
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
-    // На macOS getrusage возвращает байты, на Linux - килобайты.
+    // On macOS getrusage returns bytes, on Linux - kilobytes
 #if defined(__APPLE__)
     std::cerr << "Peak RAM usage: " << fixed << setprecision(2)
               << r_usage.ru_maxrss / (1024.0 * 1024.0) << " MB\n";
@@ -216,8 +216,8 @@ int main(int argc, char* argv[]) {
 
         if (out_fp) {
             // --- ONE-SHOT MASSIVE I/O ---
-            // Максимальная длина int32_t с минусом и '\n' - это 12 байт (-2147483648\n).
-            // Выделяем один огромный буфер под все элементы сразу.
+            // Maximum length int32_t with minus and ' n' is 12 bytes (-2147483648 n).
+            // Single huge buffer for all items at once.
             size_t max_req_size = data.size() * 12;
             std::unique_ptr<char[]> giant_buffer(new char[max_req_size]);
             char* ptr = giant_buffer.get();
@@ -229,13 +229,13 @@ int main(int argc, char* argv[]) {
                     uint32_t uval;
                     if (v < 0) {
                         *ptr++ = '-';
-                        // Безопасный модуль без переполнения на INT_MIN
+                        // Safe module without overflow to INT_MIN
                         uval = ~static_cast<uint32_t>(v) + 1;
                     } else {
                         uval = static_cast<uint32_t>(v);
                     }
 
-                    // Конвертация в обратном порядке
+                    // Conversion in reverse order
                     char temp[12];
                     int t_idx = 0;
                     while (uval > 0) {
@@ -249,17 +249,17 @@ int main(int argc, char* argv[]) {
                     }
                 }
 
-                // Если выводим в терминал (stdout) - ставим пробел
-                // Если в файл - оставляем '\n'
+                // If we output to the terminal (stdout) - we set the space
+                // If in file - leave ' n'
                 *ptr++ = (out_fp == stdout) ? ' ' : '\n'; // Fixef from wptr on ptr
             }
 
-            // Финальный перенос строки для терминала
+            // The final line transfer for terminal
             if (out_fp == stdout) {
                 *ptr++ = '\n'; // Fixef from wptr on ptr
             }
 
-            // Вычисляем итоговый размер данных и записываем всё ЗА 1 РАЗ
+            // Calculate the total data size and record everything ONCE
             size_t total_bytes = ptr - giant_buffer.get();
             fwrite(giant_buffer.get(), 1, total_bytes, out_fp);
 
